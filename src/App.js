@@ -1,4 +1,3 @@
-import './App.css';
 import Performance from "./Performance";
 import Header from "./Header";
 
@@ -9,16 +8,6 @@ function App() {
     <div className="App">
         <Header slogan={slogan} />
         <Performance title={title} />
-        <div className="main container">
-
-            <figure className="main__image-block">
-                <img className="main__image" src="/images/2022-09-13_20-00-44.png" alt="скриншот экрана с отображением работающего расширения React Devtools"/>
-                <figcaption className="main__text">
-                    <p>Запустил расширение</p>
-                </figcaption>
-            </figure>
-
-        </div>
     </div>
   );
 }
