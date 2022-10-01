@@ -3,7 +3,7 @@ import {Box, Button, List, TextField, Typography,} from "@mui/material";
 import Chats from "./Chats";
 
 
-const Sidebar = ({createNewChat, arrayChats, dropElemChats}) => {
+const Sidebar = ({createNewChat, arrayChats, dropElemChats, showMessageChat}) => {
     const nameField = 'Новый чат';
     const nameButton = 'Добавить';
     const [chatName, setChatName] = useState('');
@@ -58,7 +58,8 @@ const Sidebar = ({createNewChat, arrayChats, dropElemChats}) => {
                                 key={item.id}
                                 name={item.name}
                                 id={item.id}
-                                dropElemChats={dropElemChats}/>) :
+                                dropElemChats={dropElemChats}
+                            />) :
                         (<Chats name={"чатов нет"}/>)
                     }
                 </List>

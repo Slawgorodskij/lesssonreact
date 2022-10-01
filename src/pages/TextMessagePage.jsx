@@ -1,13 +1,107 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState, useContext} from 'react';
 import {Box, Button, TextField, Typography} from "@mui/material";
+import {useParams} from "react-router-dom";
 import OneMessage from "../components/OneMessage";
+import {ThemeContext} from "../context";
 
-const TextMessagePage = (user) => {
-    const nameField = ' Поле сообщения';
+const TextMessagePage = ({user}) => {
+    const {chatId} = useParams();
+    const nameField = 'Поле сообщения';
     const nameButton = 'Отправить';
-    const [messageList, setMessageList] = useState([]);
+    const [messageList, setMessageList] = useState([
+        {
+            'id': 1,
+            'arrayChatsId': 111,
+            'text': 'много слов о музыке',
+            'author': 'Степан',
+        },
+        {
+            'id': 2,
+            'arrayChatsId': 111,
+            'text': 'ещё много слов о музыке',
+            'author': 'Николай',
+        },
+        {
+            'id': 3,
+            'arrayChatsId': 111,
+            'text': 'и снова слова о музыке',
+            'author': 'Иван',
+        },
+        {
+            'id': 4,
+            'arrayChatsId': 111,
+            'text': 'просто песня',
+            'author': 'Степан',
+        },
+        {
+            'id': 5,
+            'arrayChatsId': 112,
+            'text': 'Семья',
+            'author': 'Николай',
+        },
+        {
+            'id': 6,
+            'arrayChatsId': 112,
+            'text': 'Снова семья',
+            'author': 'Иван',
+        },
+        {
+            'id': 7,
+            'arrayChatsId': 112,
+            'text': 'Конечно семья',
+            'author': 'Степан',
+        },
+        {
+            'id': 8,
+            'arrayChatsId': 114,
+            'text': 'Побежали за здоровьем',
+            'author': 'Николай',
+        },
+        {
+            'id': 9,
+            'arrayChatsId': 114,
+            'text': 'побежали',
+            'author': 'Иван',
+        },
+        {
+            'id': 10,
+            'arrayChatsId': 114,
+            'text': 'С песней',
+            'author': 'Степан',
+        },
+        {
+            'id': 11,
+            'arrayChatsId': 114,
+            'text': 'И семьёй',
+            'author': 'Николай',
+        },
+        {
+            'id': 12,
+            'arrayChatsId': 114,
+            'text': 'Вперед',
+            'author': 'Иван',
+        },
+
+    ]);
+    const [showMessageList, setShowMessageList] = useState([]);
     const [text, setText] = useState('');
     const inputRef = useRef(null);
+    const [idChat, setIdChat] = useState('')
+    const {themes} = useContext(ThemeContext)
+
+    const addShowMessage = (id) => {
+        setShowMessageList(messageList.filter(obj => obj.arrayChatsId === id))
+    }
+
+    const dropShowMessage = (id) => {
+        setShowMessageList(messageList.filter(obj => obj.arrayChatsId !== id))
+    }
+    if (chatId && +chatId !== +idChat) {
+        dropShowMessage(idChat)
+        setIdChat(chatId);
+        addShowMessage(+chatId)
+    }
+
 
     const textChange = (event) => {
         setText(event.target.value);
@@ -22,11 +116,14 @@ const TextMessagePage = (user) => {
         if (text !== '') {
             const message = {
                 'id': giveLastId(messageList),
+                'arrayChatsId': idChat,
                 'text': text,
-                'author': user.user,
+                'author': user,
             }
-            setMessageList( [...messageList, message]);
+            setMessageList([...messageList, message]);
+            setShowMessageList([...showMessageList, message])
             setText(() => '');
+
         }
     }
 
@@ -41,7 +138,7 @@ const TextMessagePage = (user) => {
             }
 
             setTimeout(() => {
-                setMessageList( [...messageList, message]);
+                setMessageList([...messageList, message]);
             }, 1500)
         }
     }, [messageList]);
@@ -49,6 +146,7 @@ const TextMessagePage = (user) => {
     useEffect(() => {
         inputRef.current.focus();
     }, []);
+
     return (
         <>
             <Box
@@ -56,7 +154,7 @@ const TextMessagePage = (user) => {
                     marginBottom: '2%',
                     padding: '5px',
                     height: '73%',
-                    background: '#d8d8e0',
+                    background: themes.background,
                     borderRadius: '15px',
                     overflowY: 'scroll',
                     "&::-webkit-scrollbar": {
@@ -70,7 +168,8 @@ const TextMessagePage = (user) => {
                         borderRadius: 2
                     }
                 }}>
-                {messageList.map(item => <OneMessage key={item.id} id={item.id} text={item.text} author={item.author}/>)}
+                {showMessageList.map(item => <OneMessage key={item.id} id={item.id} text={item.text}
+                                                         author={item.author}/>)}
             </Box>
             <Box
                 component={'form'}
@@ -80,7 +179,7 @@ const TextMessagePage = (user) => {
                     flexDirection: 'column',
                     justifyContent: 'space-around',
                     height: '23%',
-                    background: '#d8d8e0',
+                    background: themes.background,
                     borderRadius: '15px',
                 }}>
                 <Typography

@@ -12,7 +12,7 @@ let linkStyle = {
     color: '#827771',
 };
 
-const Chats = ({name, id, dropElemChats}) => {
+const Chats = ({name, id, dropElemChats, showMessageChat}) => {
     const {chatId} = useParams();
     let buttonStyle;
 
