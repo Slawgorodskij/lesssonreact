@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {Box, Button, List, TextField, Typography,} from "@mui/material";
 import Chats from "./Chats";
+import {useChats} from "../store/useChats";
 
-
-const Sidebar = ({createNewChat, arrayChats, dropElemChats, showMessageChat}) => {
+const Sidebar = ({nameChat, createNewChat,}) => {
     const nameField = 'Новый чат';
     const nameButton = 'Добавить';
     const [chatName, setChatName] = useState('');
@@ -11,18 +11,17 @@ const Sidebar = ({createNewChat, arrayChats, dropElemChats, showMessageChat}) =>
     const chatNameChange = (event) => {
         setChatName(event.target.value);
     }
+    const {addChatsAction} = useChats();
 
     const addChats = (event) => {
         event.preventDefault();
         const newChat = {
-            'id': giveLastId(arrayChats),
+            'id': Date.now(),
             'name': chatName,
         }
-        createNewChat(newChat);
+
+        addChatsAction(newChat);
         setChatName(() => '');
-    }
-    const giveLastId = (array) => {
-        return array.length ? array[array.length - 1].id + 1 : 0;
     }
 
     return (
@@ -33,7 +32,7 @@ const Sidebar = ({createNewChat, arrayChats, dropElemChats, showMessageChat}) =>
                     height: '75%',
                     background: '#d8d8e0',
                     borderRadius: '15px',
-                    overflowY: 'scroll',
+                    overflow: 'auto',
                     "&::-webkit-scrollbar": {
                         width: 10
                     },
@@ -52,13 +51,12 @@ const Sidebar = ({createNewChat, arrayChats, dropElemChats, showMessageChat}) =>
                         flexDirection: 'column',
                     }}>
 
-                    {arrayChats.length ?
-                        arrayChats.map(item =>
+                    {nameChat.length ?
+                        nameChat.map(item =>
                             <Chats
                                 key={item.id}
                                 name={item.name}
                                 id={item.id}
-                                dropElemChats={dropElemChats}
                             />) :
                         (<Chats name={"чатов нет"}/>)
                     }

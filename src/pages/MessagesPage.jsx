@@ -1,54 +1,25 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useParams} from "react-router-dom";
 import {Container, Grid} from "@mui/material";
 import HeaderMessage from "../components/HeaderMessage";
 import Sidebar from "../components/Sidebar";
 import TextMessagePage from "./TextMessagePage";
+import {useSelector} from "react-redux";
 
 const user = 'Человек';
 
 const MessagesPage = () => {
     const {chatId} = useParams();
     let namePage = 'Разделы'
-    const [arrayChats, setArrayChats] = useState([
-        {
-            'id': 111,
-            'name': 'О музыке',
-        },
-        {
-            'id': 112,
-            'name': 'О семье',
-        },
-        {
-            'id': 113,
-            'name': 'О работе',
-        },
-        {
-            'id': 114,
-            'name': 'О здоровье',
-        },
-        {
-            'id': 115,
-            'name': 'О любви',
-        },
-
-    ]);
+    const nameChat = useSelector(state => state.chats.nameChat);
 
     if (chatId) {
-        const positiveArr = arrayChats.filter((item) => {
+        const positiveArr = nameChat.filter((item) => {
             return +item.id === +chatId;
         });
         if (positiveArr.length) {
             namePage = positiveArr[0].name;
         }
-    }
-
-    const dropChats = (dataId) => {
-        setArrayChats(arrayChats.filter(obj => obj.id !== dataId));
-    }
-
-    const createNewChat = (nameChat) => {
-        setArrayChats([...arrayChats, nameChat]);
     }
 
     return (
@@ -70,10 +41,7 @@ const MessagesPage = () => {
                         xs={4}
                         sx={{height: '100%'}}
                     >
-                        <Sidebar
-                            createNewChat={createNewChat}
-                            arrayChats={arrayChats}
-                            dropElemChats={dropChats}/>
+                        <Sidebar nameChat={nameChat}/>
                     </Grid>
                     <Grid
                         item

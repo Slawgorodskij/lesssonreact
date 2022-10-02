@@ -3,6 +3,7 @@ import {Link, useParams} from "react-router-dom";
 import {Avatar, IconButton, ListItem, ListItemAvatar, ListItemButton, ListItemText} from "@mui/material";
 import FolderIcon from '@mui/icons-material/Folder'
 import DeleteIcon from '@mui/icons-material/Delete';
+import {useChats} from "../store/useChats";
 
 let linkStyle = {
     width: '100%',
@@ -12,7 +13,7 @@ let linkStyle = {
     color: '#827771',
 };
 
-const Chats = ({name, id, dropElemChats, showMessageChat}) => {
+const Chats = ({name, id,}) => {
     const {chatId} = useParams();
     let buttonStyle;
 
@@ -22,9 +23,10 @@ const Chats = ({name, id, dropElemChats, showMessageChat}) => {
             backgroundColor: '#1a5251',
         }
     }
+    const {deleteChatsAction} = useChats();
 
-    const dropChat = () => {
-        dropElemChats(id);
+    const dropChat = (id) => {
+        deleteChatsAction(id);
     }
 
     return (
@@ -46,7 +48,7 @@ const Chats = ({name, id, dropElemChats, showMessageChat}) => {
                 </ListItemButton>
             </Link>
             <IconButton
-                onClick={dropChat}
+                onClick={() => dropChat(id)}
                 key={id}
                 disabled={!id}
                 aria-label="delete">
