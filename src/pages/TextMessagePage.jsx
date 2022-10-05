@@ -3,99 +3,31 @@ import {Box, Button, TextField, Typography} from "@mui/material";
 import {useParams} from "react-router-dom";
 import OneMessage from "../components/OneMessage";
 import {ThemeContext} from "../context";
+import {useSelector} from "react-redux";
+import {useMessages} from "../store/useMessages";
+
+const nameField = 'Поле сообщения';
+const nameButton = 'Отправить';
 
 const TextMessagePage = ({user}) => {
     const {chatId} = useParams();
-    const nameField = 'Поле сообщения';
-    const nameButton = 'Отправить';
-    const [messageList, setMessageList] = useState([
-        {
-            'id': 1,
-            'arrayChatsId': 111,
-            'text': 'много слов о музыке',
-            'author': 'Степан',
-        },
-        {
-            'id': 2,
-            'arrayChatsId': 111,
-            'text': 'ещё много слов о музыке',
-            'author': 'Николай',
-        },
-        {
-            'id': 3,
-            'arrayChatsId': 111,
-            'text': 'и снова слова о музыке',
-            'author': 'Иван',
-        },
-        {
-            'id': 4,
-            'arrayChatsId': 111,
-            'text': 'просто песня',
-            'author': 'Степан',
-        },
-        {
-            'id': 5,
-            'arrayChatsId': 112,
-            'text': 'Семья',
-            'author': 'Николай',
-        },
-        {
-            'id': 6,
-            'arrayChatsId': 112,
-            'text': 'Снова семья',
-            'author': 'Иван',
-        },
-        {
-            'id': 7,
-            'arrayChatsId': 112,
-            'text': 'Конечно семья',
-            'author': 'Степан',
-        },
-        {
-            'id': 8,
-            'arrayChatsId': 114,
-            'text': 'Побежали за здоровьем',
-            'author': 'Николай',
-        },
-        {
-            'id': 9,
-            'arrayChatsId': 114,
-            'text': 'побежали',
-            'author': 'Иван',
-        },
-        {
-            'id': 10,
-            'arrayChatsId': 114,
-            'text': 'С песней',
-            'author': 'Степан',
-        },
-        {
-            'id': 11,
-            'arrayChatsId': 114,
-            'text': 'И семьёй',
-            'author': 'Николай',
-        },
-        {
-            'id': 12,
-            'arrayChatsId': 114,
-            'text': 'Вперед',
-            'author': 'Иван',
-        },
-
-    ]);
-    const [showMessageList, setShowMessageList] = useState([]);
-    const [text, setText] = useState('');
     const inputRef = useRef(null);
+    const {themes} = useContext(ThemeContext);
+    const messages = useSelector(state => state.messages.messages);
+    const {addMessagesAction} = useMessages();
+    const [text, setText] = useState('');
     const [idChat, setIdChat] = useState('')
-    const {themes} = useContext(ThemeContext)
+
+    const [showMessageList, setShowMessageList] = useState([]);
 
     const addShowMessage = (id) => {
-        setShowMessageList(messageList.filter(obj => obj.arrayChatsId === id))
+        setShowMessageList(messages.filter(obj => obj.arrayChatsId === id))
     }
 
     const dropShowMessage = (id) => {
-        setShowMessageList(messageList.filter(obj => obj.arrayChatsId !== id))
+        setShowMessageList(messages.filter(obj => obj.arrayChatsId !== id))
     }
+
     if (chatId && +chatId !== +idChat) {
         dropShowMessage(idChat)
         setIdChat(chatId);
@@ -115,33 +47,17 @@ const TextMessagePage = ({user}) => {
         event.preventDefault();
         if (text !== '') {
             const message = {
-                'id': giveLastId(messageList),
+                'id': giveLastId(messages),
                 'arrayChatsId': idChat,
                 'text': text,
                 'author': user,
             }
-            setMessageList([...messageList, message]);
+            addMessagesAction(message);
             setShowMessageList([...showMessageList, message])
             setText(() => '');
 
         }
     }
-
-    useEffect(() => {
-        let lastMessage = messageList[messageList.length - 1];
-
-        if (lastMessage && lastMessage.author !== 'Ваш любимый бот') {
-            const message = {
-                'id': giveLastId(messageList),
-                'text': `${lastMessage.author} написал новое сообщение`,
-                'author': 'Ваш любимый бот',
-            }
-
-            setTimeout(() => {
-                setMessageList([...messageList, message]);
-            }, 1500)
-        }
-    }, [messageList]);
 
     useEffect(() => {
         inputRef.current.focus();
@@ -156,7 +72,7 @@ const TextMessagePage = ({user}) => {
                     height: '73%',
                     background: themes.background,
                     borderRadius: '15px',
-                    overflowY: 'scroll',
+                    overflowY: 'auto',
                     "&::-webkit-scrollbar": {
                         width: 10
                     },
