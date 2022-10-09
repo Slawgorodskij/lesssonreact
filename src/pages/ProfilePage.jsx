@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from "../components/Header";
-import ButtonLink from "../components/ButtonLink";
+import ButtonLink from "../components/ui/ButtonLink";
 
 const ProfilePage = () => {
     const nameLink = 'Выйти';

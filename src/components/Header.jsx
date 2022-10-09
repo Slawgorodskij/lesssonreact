@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {Box, FormControlLabel, Typography} from "@mui/material";
 import {MaterialUISwitch} from "./ui/MaterialUISwitch";
 
-import ButtonLink from "./ButtonLink";
+import ButtonLink from "./ui/ButtonLink";
 import {ThemeContext} from "../context";
 
 const logo = 'Наш чат'

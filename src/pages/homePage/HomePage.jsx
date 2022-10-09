@@ -1,35 +1,11 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Box, Typography} from "@mui/material";
-import Header from "../components/Header";
-import ButtonLink from "../components/ButtonLink";
+import ButtonLink from "../../components/ui/ButtonLink";
 
-const HomePage = () => {
-
-    const title = 'Общение - надежный способ:';
-    const nameLink = 'Войти';
-    const addressLink = '/messages';
-    const nameButtonLink = 'Тебя ждут';
-
-    const [arrayOffering] = useState([
-        {
-            'id': 1,
-            'text': 'найти новых друзей,'
-        },
-        {
-            'id': 2,
-            'text': 'узнать что-то новое,'
-        },
-        {
-            'id': 3,
-            'text': 'поделиться своими знаниями.'
-        }]);
+const HomePage = ({title, arrayOffering, nameButtonLink} ) => {
 
     return (
         <>
-            <Header
-                nameLink={nameLink}
-                addressLink={addressLink}
-            />
             <Box
                 sx={{
                     color: '#d5dde3',

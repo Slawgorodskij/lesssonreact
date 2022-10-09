@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {Box, FormControlLabel, Typography} from "@mui/material";
-import ButtonLink from "./ButtonLink";
+import ButtonLink from "./ui/ButtonLink";
 import {ThemeContext} from "../context";
 import {MaterialUISwitch} from "./ui/MaterialUISwitch";
 

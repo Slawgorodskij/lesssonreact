@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box, Typography} from "@mui/material";
 import Header from "../components/Header";
-import ButtonLink from "../components/ButtonLink";
+import ButtonLink from "../components/ui/ButtonLink";
 
 const Page404 = () => {
     const title = 'что-то пошло не так';

@@ -3,7 +3,7 @@ import {Link, useParams} from "react-router-dom";
 import {Avatar, IconButton, ListItem, ListItemAvatar, ListItemButton, ListItemText} from "@mui/material";
 import FolderIcon from '@mui/icons-material/Folder'
 import DeleteIcon from '@mui/icons-material/Delete';
-import {useChats} from "../store/useChats";
+import {useChats} from "../store/chats/useChats";
 
 let linkStyle = {
     width: '100%',
