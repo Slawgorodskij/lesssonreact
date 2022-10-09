@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState, useContext} from 'react';
 import {Box, Button, TextField, Typography} from "@mui/material";
 import {useParams} from "react-router-dom";
-import OneMessage from "../components/OneMessage";
-import {ThemeContext} from "../context";
+import OneMessage from "../../components/OneMessage";
+import {ThemeContext} from "../../context";
 import {useSelector} from "react-redux";
-import {useMessages} from "../store/useMessages";
+import {useMessages} from "../../store/messages/useMessages";
 
 const nameField = 'Поле сообщения';
 const nameButton = 'Отправить';
@@ -14,26 +14,8 @@ const TextMessagePage = ({user}) => {
     const inputRef = useRef(null);
     const {themes} = useContext(ThemeContext);
     const messages = useSelector(state => state.messages.messages);
-    const {addMessagesAction} = useMessages();
+    const {addMessagesAction, asyncAnswerMessagesAction} = useMessages();
     const [text, setText] = useState('');
-    const [idChat, setIdChat] = useState('')
-
-    const [showMessageList, setShowMessageList] = useState([]);
-
-    const addShowMessage = (id) => {
-        setShowMessageList(messages.filter(obj => obj.arrayChatsId === id))
-    }
-
-    const dropShowMessage = (id) => {
-        setShowMessageList(messages.filter(obj => obj.arrayChatsId !== id))
-    }
-
-    if (chatId && +chatId !== +idChat) {
-        dropShowMessage(idChat)
-        setIdChat(chatId);
-        addShowMessage(+chatId)
-    }
-
 
     const textChange = (event) => {
         setText(event.target.value);
@@ -48,14 +30,30 @@ const TextMessagePage = ({user}) => {
         if (text !== '') {
             const message = {
                 'id': giveLastId(messages),
-                'arrayChatsId': idChat,
+                'arrayChatsId': +chatId,
                 'text': text,
                 'author': user,
             }
             addMessagesAction(message);
-            setShowMessageList([...showMessageList, message])
+            answerBot()
             setText(() => '');
+        }
+    }
 
+    const answerBot = () =>{
+
+        let lastMessage = messages[messages.length - 1];
+        console.log(lastMessage)
+        let message = {};
+
+        if (lastMessage && lastMessage.author !== 'Ваш любимый бот') {
+            message = {
+                'id': giveLastId(messages),
+                'arrayChatsId': +chatId,
+                'text': `${lastMessage.author} написал новое сообщение`,
+                'author': 'Ваш любимый бот',
+            }
+            asyncAnswerMessagesAction(message);
         }
     }
 
@@ -84,8 +82,11 @@ const TextMessagePage = ({user}) => {
                         borderRadius: 2
                     }
                 }}>
-                {showMessageList.map(item => <OneMessage key={item.id} id={item.id} text={item.text}
-                                                         author={item.author}/>)}
+                {chatId ? messages.filter((obj => obj.arrayChatsId === +chatId))
+                        .map(item => <OneMessage key={item.id} id={item.id} text={item.text}
+                                                 author={item.author}/>) :
+                    '<- выберите раздел'
+                }
             </Box>
             <Box
                 component={'form'}

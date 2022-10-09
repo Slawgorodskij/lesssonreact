@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {Box, Button, List, TextField, Typography,} from "@mui/material";
 import Chats from "./Chats";
-import {useChats} from "../store/useChats";
+import {useChats} from "../store/chats/useChats";
 
-const Sidebar = ({nameChat, createNewChat,}) => {
+const Sidebar = ({nameChat}) => {
     const nameField = 'Новый чат';
     const nameButton = 'Добавить';
     const [chatName, setChatName] = useState('');

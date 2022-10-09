@@ -1,5 +1,7 @@
-const ADD_MESSAGE = 'ADD_MESSAGE';
-const initialState = {
+export const ADD_MESSAGE = 'ADD_MESSAGE';
+export const ANSWER_MESSAGE = 'ANSWER_MESSAGE';
+export const ASYNC_ANSWER_MESSAGE = 'ASYNC_ANSWER_MESSAGE';
+export const initialState = {
     messages: [
         {
             'id': 1,
@@ -84,9 +86,17 @@ export const messagesReducer = (state = initialState, action) => {
                 ...state,
                 messages: [...state.messages, action.payload]
             }
+        case ANSWER_MESSAGE:
+            console.log(action.payload.payload)
+            return {
+                ...state,
+                messages: [...state.messages, action.payload]
+            }
         default:
             return state;
     }
 }
 
 export const addMessagesAction = (payload) => ({type: ADD_MESSAGE, payload});
+export const answerMessagesAction = (payload) => ({type: ANSWER_MESSAGE, payload});
+export const asyncAnswerMessagesAction = (payload) => ({type: ASYNC_ANSWER_MESSAGE, payload});
